@@ -1,10 +1,22 @@
-apiVersion: airflow.k8s.io/v1alpha
+apiVersion: airflow.k8s.io/v1alpha1
+kind: AirflowBase
+metadata:
+  name: mysql-base
+spec:
+  mysql:
+    operator: False
+    image: mysql
+    version: "5.7"
+    resources: {}
+---
+
+apiVersion: airflow.k8s.io/v1alpha1
 kind: AirflowCluster
 metadata:
   name: test-airflow-crd
 spec:
   airflowbase:
-    namee: mysql-base
+    name: mysql-base
   executor: Kubernetes
   config:
     airflowsecret:
