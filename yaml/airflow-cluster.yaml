@@ -1,0 +1,35 @@
+apiVersion: airflow.k8s.io/v1alpha
+kind: AirflowCluster
+metadata:
+  name: test-airflow-crd
+spec:
+  airflowbase:
+    namee: mysql-base
+  executor: Kubernetes
+  config:
+    airflowsecret:
+      - Env: "AIRFLOW__KUBERNETES__GIT_USER"
+        Secret: "github-secret"
+        Field: "username"
+      - Env: "AIRFLOW__KUBERNETES__GIT_USER"
+        Secret: "github-secret"
+        Field: "password"
+    airflow:
+      AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: "100"
+      AIRFLOW__KUBERNETES__DELETE_WORKER_PODS: "False"
+  dags:
+    subdir: "dags/"
+    git:
+      repo: "https://github.com/Neroroms/airflow-crd.git"
+      once: false
+      branch: master
+      user: Neroroms
+      cred:
+        name: github-secret
+  scheduler:
+    version: "1.10.2"
+  ui:
+    replicas: 1
+    version: "1.10.2"
+  worker:
+    version: "1.10.2"
